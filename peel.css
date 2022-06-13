@@ -37,22 +37,22 @@
 /*------------] Some Defaults [------------*/
 
 .peel-top {
-  background-color: #81afcb;
+  /* background-color: #81afcb; */
 }
 
 .peel-back {
-  background-color: #a0c7df;
+  background-color: #f8f9fa;
 }
 
 .peel-bottom {
-  background-color: #688394;
+  background-color: #d4d9dc;
 }
 
 
 /* ct test */
 
 .peel {
-  width: 150px;
-  height: 200px;
+  width: 175px;
+  height: 245px;
   margin: auto;
 }

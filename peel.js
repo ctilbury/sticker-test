@@ -409,6 +409,10 @@
       }
   
       function dragEnd(evt) {
+        if (p.getAmountClipped() < 1) {
+          p.stickBackDown(evt, self);
+        }
+
         if (!isDragging && self.pressHandler) {
           callHandler(self.pressHandler, evt);
         }
@@ -424,6 +428,24 @@
       this.addEvent(el, 'mousedown', dragStart.bind(this, false));
       this.addEvent(el, 'touchstart', dragStart.bind(this, true));
       this.dragEventsSetup = true;
+    }
+
+    Peel.prototype.stickBackDown = function(evt) {
+      var self = this;
+      var coords = getEventCoordinates(evt, self.el);
+
+      // animate a peel path using gsap to reset to original position
+      self.setPeelPath(coords.x, coords.y, 0, 0);
+      self.t = 0;
+      gsap.to(self, {
+        t: 1,
+        delay: 0.1,
+        duration: 1,
+        ease: "power2.inOut",
+        onUpdate: function() {
+          self.setTimeAlongPath(self.t);
+        },
+      });
     }
   
     /**
