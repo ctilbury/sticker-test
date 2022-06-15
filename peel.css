@@ -51,8 +51,34 @@
 
 /* ct test */
 
+#original-sticker {
+  top: 120px;
+  left: 200px;
+  /* transform: translate(200px, 100px) rotate(400deg); */
+  /* transform: rotate(400deg); */
+}
+
 .peel {
+  position: absolute;
   width: 175px;
   height: 245px;
-  margin: auto;
+}
+
+#duplicate-sticker {
+  z-index: 4;
+  width: 175px;
+  height: 245px;
+}
+
+.hidden {
+  display: none;
+}
+
+#draggable-sticker {
+  width: 175px;
+  height: 245px;
+  position: absolute;
+  top: 120px;
+  left: 200px;
+  background-color: cornflowerblue;
 }

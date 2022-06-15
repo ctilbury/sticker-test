@@ -1,3 +1,5 @@
+// https://andrewplummer.github.io/peel-js/
+
 (function(win) {
 
     // Constants
@@ -406,11 +408,18 @@
           callHandler(self.dragHandler, evt);
         }
         isDragging = true;
+
+        if (self.getAmountClipped() >= 1) {
+          const transform = self.el.querySelector('.peel-back').style.transform;
+          self.movePeeledSticker(evt, transform);
+        }
       }
   
       function dragEnd(evt) {
-        if (p.getAmountClipped() < 1) {
-          p.stickBackDown(evt, self);
+        console.log('drag end');
+
+        if (self.getAmountClipped() < 1) {
+          self.unpeel(evt);
         }
 
         if (!isDragging && self.pressHandler) {
@@ -430,7 +439,7 @@
       this.dragEventsSetup = true;
     }
 
-    Peel.prototype.stickBackDown = function(evt) {
+    Peel.prototype.unpeel = function(evt) {
       var self = this;
       var coords = getEventCoordinates(evt, self.el);
 
@@ -446,6 +455,80 @@
           self.setTimeAlongPath(self.t);
         },
       });
+    }
+
+    Peel.prototype.movePeeledSticker = function(evt, transform) {
+      const self = this;
+
+      self.el.classList.add('hidden');
+      document.querySelector('#draggable-sticker').style.transform = transform;
+      document.querySelector('#draggable-sticker').classList.remove('hidden');
+
+    }
+
+    Peel.prototype.stickDown = function(evt, transform) {
+      var self = this;
+      var coords = getEventCoordinates(evt, self.el);
+
+      // console.log(coords);
+      // console.log(transform);
+      // console.log(self);
+
+      // self.el.style.transform = transform;
+
+      // transform will be a string in the format 'translate(444.08px, 356.73px) rotate(465.95deg)'
+      // const translateEnd = transform.indexOf(')');
+      // 'translate(' = 10 chars
+      // const transformCoords = transform.slice(10, translateEnd);
+      // eg. '444.08px, 356.73px'
+      // const splitCoords = transformCoords.split(' ');
+      
+      // remove the 'px,'
+      // const transformX = splitCoords[0].slice(0, -3);
+      // console.log(`transformX: ${transformX}`);
+
+      // remove the 'px'
+      // const transformY = splitCoords[1].slice(0, -2);
+      // console.log(`transformY: ${transformY}`);
+
+      // ') rotate(' = 9 chars, also remove the 'deg)' from the end: 4 chars
+      // const rotation = transform.slice(translateEnd + 9, -4);
+      // console.log(`rotation: ${rotation}`);
+
+
+      // animate a peel path using gsap to reset to original position
+      // self.setPeelPath(coords.x, coords.y, 0, 0);
+      // self.t = 0;
+      // gsap.to(self, {
+      //   t: 1,
+      //   delay: 0.1,
+      //   duration: 1,
+      //   ease: "power2.inOut",
+      //   onUpdate: function() {
+      //     self.setTimeAlongPath(self.t);
+      //   },
+      // });
+
+      // gsap.to(self.el, {
+      //   x: transformX - 175,
+      //   delay: 0,
+      //   duration: 0,
+      //   ease: "power2.inOut"
+      // });
+
+      // gsap.to(self.el, {
+      //   y: transformY - 245,
+      //   delay: 0,
+      //   duration: 0,
+      //   ease: "power2.inOut"
+      // });
+
+      // gsap.to(self.el, {
+      //   rotation: rotation - 360,
+      //   delay: 0,
+      //   duration: 0,
+      //   ease: "power2.inOut"
+      // });
     }
   
     /**
@@ -1643,8 +1726,50 @@
 
 //   ct test
 
-var p = new Peel('#simple', { corner: Peel.Corners.TOP_LEFT });
+var p = new Peel('#original-sticker', { corner: Peel.Corners.TOP_LEFT });
+// console.log(p);
 p.handleDrag(function(evt, x, y) {
     this.setPeelPosition(x, y);
 });
+
+// function stick() {
+//   const transform = document.querySelector('#original-sticker .peel-back').style.transform;
+//   console.dir(transform)
+
+//   const newSticker = document.createElement('div');
+//   newSticker.setAttribute('id', 'duplicate-sticker');
+//   newSticker.setAttribute('class', 'peel');
+  
+//   const newTop = document.createElement('div');
+//   newTop.setAttribute('class', 'peel-top');
+//   newSticker.appendChild(newTop);
+
+//   const newImg = document.createElement('img');
+//   newImg.setAttribute('src', 'adambomb.jpg');
+//   newImg.setAttribute('alt', '');
+//   newTop.appendChild(newImg);
+
+//   const newBack = document.createElement('div');
+//   newBack.setAttribute('class', 'peel-back');
+//   newBack.innerText = 'Back';
+//   newSticker.appendChild(newBack);
+
+//   const newBottom = document.createElement('div');
+//   newBottom.setAttribute('class', 'peel-bottom');
+//   newBottom.innerText = 'Bottom';
+//   newSticker.appendChild(newBottom);
+
+//   newSticker.setAttribute('style', `transform: ${transform}`);
+
+//   // document.body.appendChild(newSticker);
+
+//   // var q = new Peel('#duplicate-sticker', { corner: Peel.Corners.TOP_LEFT });
+//   // q.handleDrag(function(evt, x, y) {
+//   //     this.setPeelPosition(x, y);
+//   // });
+
+//   // console.dir(newSticker);
+// }
+
+
   
