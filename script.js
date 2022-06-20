@@ -6,12 +6,6 @@ let p = new Peel('#original-sticker', {
   bottomShadow: false
 });
 
-// When the peel is initialised, the '#original-sticker .peel-back' div has a css transform applied.
-// Set '#draggable-sticker' to have the same transform so it starts in the same position.
-const initialTransform = p.el.querySelector('.peel-back').style.transform;
-document.querySelector('#draggable-sticker').style.transform = initialTransform;
-
-
 p.handlePress(function(evt) {
   p.setPeelPath(0, 0, 400, 470);
   p.t = 0;
@@ -24,17 +18,15 @@ p.handlePress(function(evt) {
       p.setTimeAlongPath(p.t);
     },
     onComplete: () => {
-      const endTransform = p.el.querySelector('.peel-back').style.transform;
-      swapToDraggable(endTransform);
+      swapToDraggable();
     }
   });
 });
 
-
-swapToDraggable = (endTransform) => {
-  document.querySelector('#draggable-sticker').style.transform = endTransform;
+swapToDraggable = () => {
   document.querySelector('#draggable-sticker').classList.remove('hidden');
-  document.querySelector('#original-sticker').classList.add('hidden');
+  document.querySelector('#original-sticker').classList.add('peeled');
+  document.querySelector('#original-sticker .peel-back').style.clipPath = 'none';
   setUpDrag();
 }
 
